@@ -11,18 +11,25 @@ import UIKit
 class ViewController: UIViewController, SegmentedProgressBarDelegate {
 
     private var spb: SegmentedProgressBar!
+    private let iv = UIImageView()
+    private let images = [#imageLiteral(resourceName: "img1"), #imageLiteral(resourceName: "img2"), #imageLiteral(resourceName: "img3")]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         
-        spb = SegmentedProgressBar(numberOfSegments: 2, duration: 5)
+        iv.frame = view.bounds
+        iv.contentMode = .scaleAspectFill
+        view.addSubview(iv)
+        updateImage(index: 0)
+        
+        
+        spb = SegmentedProgressBar(numberOfSegments: 3, duration: 5)
         spb.frame = CGRect(x: 15, y: 15, width: view.frame.width - 30, height: 4)
         spb.delegate = self
-        // possible configs:
-        //spb.topColor = UIColor.red
-        //spb.bottomColor = UIColor.blue
-        //spb.padding = 10
+        spb.topColor = UIColor.white
+        spb.bottomColor = UIColor.white.withAlphaComponent(0.25)
+        spb.padding = 2
         view.addSubview(spb)
 
         spb.startAnimation()
@@ -36,6 +43,7 @@ class ViewController: UIViewController, SegmentedProgressBarDelegate {
 
     func segmentedProgressBarChangedIndex(index: Int) {
         print("Now showing index: \(index)")
+        updateImage(index: index)
     }
     
     func segmentedProgressBarFinished() {
@@ -44,6 +52,10 @@ class ViewController: UIViewController, SegmentedProgressBarDelegate {
     
     @objc private func tappedView() {
         spb.isPaused = !spb.isPaused
+    }
+    
+    private func updateImage(index: Int) {
+        iv.image = images[index]
     }
 }
 
