@@ -10,11 +10,13 @@ import UIKit
 
 class ViewController: UIViewController, SegmentedProgressBarDelegate {
 
+    private var spb: SegmentedProgressBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         
-        let spb = SegmentedProgressBar(numberOfSegments: 2, duration: 5)
+        spb = SegmentedProgressBar(numberOfSegments: 2, duration: 5)
         spb.frame = CGRect(x: 15, y: 15, width: view.frame.width - 30, height: 4)
         spb.delegate = self
         // possible configs:
@@ -23,7 +25,9 @@ class ViewController: UIViewController, SegmentedProgressBarDelegate {
         //spb.padding = 10
         view.addSubview(spb)
 
-        spb.startAnimating()
+        spb.startAnimation()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedView)))
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -36,6 +40,10 @@ class ViewController: UIViewController, SegmentedProgressBarDelegate {
     
     func segmentedProgressBarFinished() {
         print("Finished!")
+    }
+    
+    @objc private func tappedView() {
+        spb.isPaused = !spb.isPaused
     }
 }
 
