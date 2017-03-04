@@ -7,6 +7,14 @@ A simple little control that animates segments like Snapchat or Instagram Storie
 
 ![Screenshot](screenshot.png)
 
+## Requirements
+- iOS 8.0+
+- Xcode 8
+
+## Installation
+
+Drag and drop `SegmentedProgressBar.swift` into your project. That's it.
+
 ## Usage
 
 ```swift
