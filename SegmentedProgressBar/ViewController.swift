@@ -16,6 +16,11 @@ class ViewController: UIViewController, SegmentedProgressBarDelegate {
         
         let spb = SegmentedProgressBar(numberOfSegments: 2, duration: 5)
         spb.frame = CGRect(x: 15, y: 15, width: view.frame.width - 30, height: 4)
+        spb.delegate = self
+        // possible configs:
+        //spb.topColor = UIColor.red
+        //spb.bottomColor = UIColor.blue
+        //spb.padding = 10
         view.addSubview(spb)
 
         spb.startAnimating()

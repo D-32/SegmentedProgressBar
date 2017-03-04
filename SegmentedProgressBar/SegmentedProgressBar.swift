@@ -17,6 +17,17 @@ protocol SegmentedProgressBarDelegate: class {
 class SegmentedProgressBar: UIView {
     
     weak var delegate: SegmentedProgressBarDelegate?
+    var topColor = UIColor.gray {
+        didSet {
+            self.updateColors()
+        }
+    }
+    var bottomColor = UIColor.gray.withAlphaComponent(0.25) {
+        didSet {
+            self.updateColors()
+        }
+    }
+    var padding: CGFloat = 2.0
     
     private var segments = [Segment]()
     private let duration: TimeInterval
@@ -32,6 +43,7 @@ class SegmentedProgressBar: UIView {
             addSubview(segment.topSegmentView)
             segments.append(segment)
         }
+        self.updateColors()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -43,7 +55,6 @@ class SegmentedProgressBar: UIView {
         if hasDoneLayout {
             return
         }
-        let padding: CGFloat = 2.0
         let width = (frame.width - (padding * CGFloat(segments.count - 1)) ) / CGFloat(segments.count)
         for (index, segment) in segments.enumerated() {
             let segFrame = CGRect(x: CGFloat(index) * (width + padding), y: 0, width: width, height: frame.height)
@@ -60,18 +71,24 @@ class SegmentedProgressBar: UIView {
     }
     
     private func animate(animationIndex: Int = 0) {
-        if animationIndex >= segments.count {
-            // finished all animations
-            delegate?.segmentedProgressBarFinished()
-            return
-        }
         let nextSegment = segments[animationIndex]
         UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: { 
             nextSegment.topSegmentView.frame.size.width = nextSegment.bottomSegmentView.frame.width
         }) { (finished) in
             let newIndex = animationIndex + 1
-            self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
-            self.animate(animationIndex: newIndex)
+            if animationIndex < self.segments.count - 1 {
+                self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
+                self.animate(animationIndex: newIndex)
+            } else {
+                self.delegate?.segmentedProgressBarFinished()
+            }
+        }
+    }
+    
+    private func updateColors() {
+        for segment in segments {
+            segment.topSegmentView.backgroundColor = topColor
+            segment.bottomSegmentView.backgroundColor = bottomColor
         }
     }
 }
@@ -80,11 +97,7 @@ fileprivate class Segment {
     let bottomSegmentView = UIView()
     let topSegmentView = UIView()
     init() {
-        bottomSegmentView.backgroundColor = UIColor.gray
-        bottomSegmentView.alpha = 0.5
         bottomSegmentView.layer.cornerRadius = 2
-        
-        topSegmentView.backgroundColor = UIColor.red
         topSegmentView.layer.cornerRadius = 2
     }
 }
