@@ -53,5 +53,12 @@ spb.isPaused = true
 spb.isPaused = false
 ```
 
+Skip / Rewind
+
+```swift
+spb.skip()
+spb.rewind()
+```
+
 [swift-image]:https://img.shields.io/badge/swift-3.0-orange.svg
 [swift-url]: https://swift.org/
