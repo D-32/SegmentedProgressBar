@@ -100,16 +100,13 @@ class SegmentedProgressBar: UIView {
         let nextSegment = segments[animationIndex]
         currentAnimationIndex = animationIndex
         self.isPaused = false // no idea why we have to do this here, but it fixes everything :D
-        UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: { 
+        UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: {
             nextSegment.topSegmentView.frame.size.width = nextSegment.bottomSegmentView.frame.width
         }) { (finished) in
-            let newIndex = animationIndex + 1
-            if animationIndex < self.segments.count - 1 {
-                self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
-                self.animate(animationIndex: newIndex)
-            } else {
-                self.delegate?.segmentedProgressBarFinished()
+            if !finished {
+                return
             }
+            self.next()
         }
     }
     
@@ -118,6 +115,34 @@ class SegmentedProgressBar: UIView {
             segment.topSegmentView.backgroundColor = topColor
             segment.bottomSegmentView.backgroundColor = bottomColor
         }
+    }
+    
+    private func next() {
+        let newIndex = self.currentAnimationIndex + 1
+        if newIndex < self.segments.count {
+            self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
+            self.animate(animationIndex: newIndex)
+        } else {
+            self.delegate?.segmentedProgressBarFinished()
+        }
+    }
+    
+    func skip() {
+        let currentSegment = segments[currentAnimationIndex]
+        currentSegment.topSegmentView.frame.size.width = currentSegment.bottomSegmentView.frame.width
+        currentSegment.topSegmentView.layer.removeAllAnimations()
+        self.next()
+    }
+    
+    func rewind() {
+        let currentSegment = segments[currentAnimationIndex]
+        currentSegment.topSegmentView.layer.removeAllAnimations()
+        currentSegment.topSegmentView.frame.size.width = 0
+        let newIndex = max(currentAnimationIndex - 1, 0)
+        let prevSegment = segments[newIndex]
+        prevSegment.topSegmentView.frame.size.width = 0
+        self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
+        self.animate(animationIndex: newIndex)
     }
 }
 
