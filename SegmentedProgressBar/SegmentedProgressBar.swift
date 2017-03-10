@@ -83,6 +83,10 @@ class SegmentedProgressBar: UIView {
             segment.bottomSegmentView.frame = segFrame
             segment.topSegmentView.frame = segFrame
             segment.topSegmentView.frame.size.width = 0
+            
+            let cr = frame.height / 2
+            segment.bottomSegmentView.layer.cornerRadius = cr
+            segment.topSegmentView.layer.cornerRadius = cr
         }
         hasDoneLayout = true
     }
@@ -121,7 +125,5 @@ fileprivate class Segment {
     let bottomSegmentView = UIView()
     let topSegmentView = UIView()
     init() {
-        bottomSegmentView.layer.cornerRadius = 2
-        topSegmentView.layer.cornerRadius = 2
     }
 }
