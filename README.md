@@ -13,7 +13,7 @@ A simple little control that animates segments like Snapchat or Instagram Storie
 
 ## Installation
 
-Drag and drop `SegmentedProgressBar.swift` into your project. That's it.
+Drag and drop [`SegmentedProgressBar.swift`](https://raw.githubusercontent.com/D-32/SegmentedProgressBar/master/SegmentedProgressBar/SegmentedProgressBar.swift) into your project. That's it.
 
 ## Usage
 
