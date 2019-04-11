@@ -120,8 +120,8 @@ class SegmentedProgressBar: UIView {
     private func next() {
         let newIndex = self.currentAnimationIndex + 1
         if newIndex < self.segments.count {
-            self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
             self.animate(animationIndex: newIndex)
+            self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
         } else {
             self.delegate?.segmentedProgressBarFinished()
         }
@@ -141,8 +141,8 @@ class SegmentedProgressBar: UIView {
         let newIndex = max(currentAnimationIndex - 1, 0)
         let prevSegment = segments[newIndex]
         prevSegment.topSegmentView.frame.size.width = 0
-        self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
         self.animate(animationIndex: newIndex)
+        self.delegate?.segmentedProgressBarChangedIndex(index: newIndex)
     }
 }
 
