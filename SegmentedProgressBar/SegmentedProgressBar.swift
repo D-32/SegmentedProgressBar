@@ -51,15 +51,28 @@ class SegmentedProgressBar: UIView {
     }
     
     private var segments = [Segment]()
-    private let duration: TimeInterval
+    private var durations = [TimeInterval]()
     private var hasDoneLayout = false // hacky way to prevent layouting again
     private var currentAnimationIndex = 0
     
     init(numberOfSegments: Int, duration: TimeInterval = 5.0) {
-        self.duration = duration
+        super.init(frame: CGRect.zero)
+
+        for _ in 0..<numberOfSegments {
+            let segment = Segment()
+            addSubview(segment.bottomSegmentView)
+            addSubview(segment.topSegmentView)
+            segments.append(segment)
+            durations.append(duration)
+        }
+        self.updateColors()
+    }
+    
+    init(durations: [TimeInterval]) {
+        self.durations = durations
         super.init(frame: CGRect.zero)
         
-        for _ in 0..<numberOfSegments {
+        for _ in 0..<durations.count {
             let segment = Segment()
             addSubview(segment.bottomSegmentView)
             addSubview(segment.topSegmentView)
@@ -100,7 +113,7 @@ class SegmentedProgressBar: UIView {
         let nextSegment = segments[animationIndex]
         currentAnimationIndex = animationIndex
         self.isPaused = false // no idea why we have to do this here, but it fixes everything :D
-        UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: durations[animationIndex], delay: 0.0, options: .curveLinear, animations: {
             nextSegment.topSegmentView.frame.size.width = nextSegment.bottomSegmentView.frame.width
         }) { (finished) in
             if !finished {
